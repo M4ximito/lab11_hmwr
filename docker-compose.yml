@@ -2,36 +2,36 @@ version: '3'
 
 services:
   php:
-    build:
+    build:  # Tworzenie obrazu usługi PHP
       context: .
       dockerfile: Dockerfile.php
     volumes:
-      - ./php:/var/www/html
+      - ./php:/var/www/html  # Montowanie lokalnego katalogu ./php do katalogu /var/www/html w kontenerze PHP
     depends_on:
-      - mysql
+      - mysql  # Zależność od usługi MySQL
 
   mysql:
-    image: mysql:latest
-    environment:
+    image: mysql:latest  # Wykorzystanie obrazu MySQL
+    environment:  # Ustawienia zmiennych środowiskowych dla MySQL
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: mydatabase
       MYSQL_USER: myuser
       MYSQL_PASSWORD: mypassword
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:latest
+    image: phpmyadmin/phpmyadmin:latest  # Wykorzystanie obrazu phpMyAdmin
     ports:
-      - '6001:80'
+      - '6001:80'  # Przekierowanie portu 6001 hosta na port 80 kontenera phpMyAdmin
     depends_on:
-      - mysql
+      - mysql  # Zależność od usługi MySQL
 
   nginx:
-    build:
+    build:  # Tworzenie obrazu usługi Nginx
       context: .
       dockerfile: Dockerfile.nginx
     ports:
-      - '6666:80'
+      - '6666:80'  # Przekierowanie portu 6666 hosta na port 80 kontenera Nginx
     volumes:
-      - ./nginx:/etc/nginx/conf.d
+      - ./nginx:/etc/nginx/conf.d  # Montowanie lokalnego katalogu ./nginx do katalogu /etc/nginx/conf.d w kontenerze Nginx
     depends_on:
-      - php
+      - php  # Zależność od usługi PHP
